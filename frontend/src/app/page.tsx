@@ -95,8 +95,8 @@ export default function Home() {
         className="mt-4"
       />
       
-      
-        <BlogCard></BlogCard>
+      <h2>Staging branch</h2>
+      <BlogCard></BlogCard>
       
     </div>
   );
