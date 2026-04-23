@@ -12,3 +12,5 @@ frontend/.env.local
 
 # Optional
 .DS_Store
+
+supabase/supabase/funcation/.env
