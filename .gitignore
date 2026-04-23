@@ -1,0 +1,14 @@
+# Next
+frontend/.next
+frontend/node_modules
+
+# Env files
+frontend/.env.local
+.env
+.env.local
+
+# Supabase local artifacts
+.supabase
+
+# Optional
+.DS_Store
