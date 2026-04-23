@@ -12,6 +12,7 @@ export default function Home() {
   const { user } = useAuth();
 
   const [users, setUsers] = useState([]);
+  const env = process.env.NEXT_PUBLIC_APP_ENV;
   
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -87,6 +88,7 @@ export default function Home() {
       <h1 className="text-4xl font-bold">
         Hello, {user?.email ?? "World!"}
       </h1>
+       <p>Environment: {env}</p>
       <Image
         src="/vercel.svg"
         alt="Vercel Logo"
@@ -95,7 +97,6 @@ export default function Home() {
         className="mt-4"
       />
       
-      <h2>Staging branch</h2>
       <BlogCard></BlogCard>
       
     </div>

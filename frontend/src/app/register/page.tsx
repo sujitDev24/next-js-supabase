@@ -85,6 +85,7 @@ export default function SignUp() {
 			if (result.error) {
 				setError(result.error);
 				setLoading(false);
+				toast.error(result.error);
 			} else {
 				setSuccess(true);
 				toast.success("Registration successful");
