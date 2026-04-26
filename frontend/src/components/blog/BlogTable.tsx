@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import { toast } from "sonner";
+import AppPagination from "@/components/common/AppPagination";
 
 type Blog = {
   id: string;
@@ -34,16 +35,25 @@ export default function BlogTable() {
 	
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  
+  const limit = 4;
+  
   const router = useRouter();
 
   useEffect(() => {
     loadBlogs();
-  }, []);
+  }, [page]);
 
   const loadBlogs = async () => {
-    const data = await getBlogs();
-    setBlogs(data);
+    const res = await getBlogs(page, limit);
+    setBlogs(res.data);
+    setTotal(res.total || 0);
   };
+
+  const totalPages = Math.ceil(total / limit);
+
 
   const handleDelete = async (id: string) => {
     const confirmDelete = confirm("Are you sure you want to delete this blog?");
@@ -136,6 +146,11 @@ export default function BlogTable() {
                 ))}
             </TableBody>
             </Table>
+            <AppPagination
+              page={page}
+              totalPages={totalPages}
+              onPageChange={setPage}
+            />
         </div>
     </div>
   );
