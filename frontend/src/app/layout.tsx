@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/navbar";
+
 import { AuthProvider } from "@/app/context/AuthContext";
 import { getCurrentUser } from "@/lib/supabase/auth-actions";
 import { ThemeProvider } from "@/app/context/ThemeContext";
@@ -38,7 +38,7 @@ export default async function RootLayout({
       <body className="min-h-full flex flex-col">
         <ThemeProvider>
           <AuthProvider initialUser={initialUser}>
-            <Navbar />
+            
             <main>
               {children}
               <Toaster position="top-right" richColors />
