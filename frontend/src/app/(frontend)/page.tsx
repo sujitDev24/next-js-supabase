@@ -69,7 +69,7 @@ export default function Home() {
           Authorization: `Bearer ${token}`,
         },
       });    
-      console.log("data", data);
+      console.log("supabase edge data", data);
     };
     callFunction();
   }, []);

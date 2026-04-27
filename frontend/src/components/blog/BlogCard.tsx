@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useBlogs } from "@/lib/hooks/useBlogs";
 import { getAllBlogs } from "@/lib/blog";
+import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { toast } from "sonner";
 
@@ -16,36 +18,49 @@ import { Button } from "@/components/ui/button";
 import AppPagination from "@/components/common/AppPagination";
 
 export default function BlogPage() {
-  const [blogs, setBlogs] = useState<any[]>([]);
-  const [page, setPage] = useState(1);
-  const [total, setTotal] = useState(0);
-
   const limit = 4;
+  const [page, setPage] = useState(1);
+  const {data, isLoading, error, isError} = useBlogs(page, limit);
+  const totalPages = Math.ceil((data?.total || 0)/limit);
+  const queryClient = useQueryClient();
+  /*
+    PREFETCH NEXT PAGE  
+  */
+  useEffect(()=>{
+    if(page < totalPages){
+      queryClient.prefetchQuery({
+        queryKey:["blogs",page+1],
+        queryFn:()=>getAllBlogs(page+1, limit),
+      });
+      
+    }
+  },[page, totalPages, queryClient]);
 
   useEffect(() => {
-    const fetchBlogs = async () => {
-      try { 
-        const res = await getAllBlogs(page, limit);
-        setBlogs(res.data);
-        setTotal(res.total || 0);
-        toast.success("Blog fetched successfully")
-      } catch (error: any) {
-        toast.error(error.message);
-      }
-    };
+    if(isError && error){
+      toast.error(
+        error instanceof Error
+        ? error.message
+        : "Failed to fetch blogs"
+      );
+    }
+  }, [isError,error]);
 
-    fetchBlogs();
-  }, [page]);
+  if(isLoading){
+    return <p>Loading...</p>;
+  }
 
-  const totalPages = Math.ceil(total / limit);
-
+  if(isError){
+    return <p>Unable to load blogs.</p>;
+  }
+  
   return (
     <div className="container mx-auto py-6">
       <h2 className="text-2xl font-bold mb-6">Blogs</h2>
 
       {/* ✅ Blog Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-        {blogs.map((blog) => (
+        {data?.data?.map((blog:any) => (
           <Card
             key={blog.id}
             className="overflow-hidden rounded-xl hover:shadow-lg transition"

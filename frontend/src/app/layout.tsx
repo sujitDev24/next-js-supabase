@@ -6,6 +6,7 @@ import { AuthProvider } from "@/app/context/AuthContext";
 import { getCurrentUser } from "@/lib/supabase/auth-actions";
 import { ThemeProvider } from "@/app/context/ThemeContext";
 import { Toaster } from "sonner";
+import QueryProvider from "@/app/providers/QueryProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,9 +39,10 @@ export default async function RootLayout({
       <body className="min-h-full flex flex-col">
         <ThemeProvider>
           <AuthProvider initialUser={initialUser}>
-            
             <main>
-              {children}
+              <QueryProvider>
+                {children}
+              </QueryProvider>
               <Toaster position="top-right" richColors />
             </main>
           </AuthProvider>
